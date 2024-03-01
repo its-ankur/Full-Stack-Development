@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <input type="text" name="Task" id="Task" placeholder="Enter Task">
+        <button type="submit">Submit</button>
+    </form>
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let form = document.querySelector("form");
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
+            let taskInput = document.getElementById("Task");
+            let taskValue = taskInput.value.trim(); // Trim removes any leading or trailing whitespace
+            if (taskValue !== "") { // Check if the input is not empty
+                let taskDiv = document.createElement("div");
+                taskDiv.innerText = taskValue;
+                document.body.appendChild(taskDiv);
+                taskInput.value = ""; // Clear the input field after adding the task
+            }
+        });
+    });
+</script>
+</html>
