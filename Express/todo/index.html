@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <form action="/addData" method="post">
+        Add Item   <input type="text" name="todo" id="todo">
+        <button type="submit">Add</button>
+    </form>
+    <button type="button" onclick="window.location.href='/showData'">All Tasks</button> -->
+    <div>
+        <input type="text" id = 'taskinp'>
+        <button id = "add">add</button>
+    </div>
+    <div id="taskcontainer">
+
+    </div>
+    <script>
+        var taskcontainer = document.getElementById('taskcontainer');
+        var taskinp = document.getElementById('taskinp');
+        var add = document.getElementById('add');
+
+        add.addEventListener('click', async () =>{
+            const obj = {
+                task: taskinp.value,
+                id: Date.now(),
+            }
+            const res = await fetch('/addData', {
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj)
+            })
+            const data = await res.json();
+            if(res.status == 200){
+                createui(data);
+            }
+
+        })
+
+        function createui(obj){
+            console.log(obj);
+            const div = document.createElement('p');
+            div.innerText = obj.task;
+            taskcontainer.appendChild(div);
+            const del = document.createElement('button');   
+            del.innerText = 'delete';
+        }
+    </script>
+</body>
+</html>
