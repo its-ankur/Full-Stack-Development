@@ -6,11 +6,6 @@
     <title>Document</title>
   </head>
   <body>
-    <!-- <form action="/addData" method="post">
-        Add Item   <input type="text" name="todo" id="todo">
-        <button type="submit">Add</button>
-    </form>
-    <button type="button" onclick="window.location.href='/showData'">All Tasks</button> -->
     <div>
       <input type="text" id="taskinp" />
       <button id="add">add</button>
@@ -37,16 +32,19 @@
         if (res.status == 200) {
           createui(data);
         }
+        taskinp.value="";
       });
 
       function createui(obj) {
         console.log(obj);
-        const div = document.createElement("p");
-        div.innerText = obj.task;
-        taskcontainer.appendChild(div);
+        const div = document.createElement("div");
+        const taskText = document.createElement("p");
+        taskText.innerText = obj.task;
+        div.appendChild(taskText);
         const del = document.createElement("button");
         del.innerText = "delete";
-        taskcontainer.appendChild(del);
+        div.appendChild(del);
+        taskcontainer.appendChild(div);
         del.addEventListener("click", async () => {
           const res1 = await fetch("/deleteData", {
             method: "DELETE",
@@ -55,13 +53,27 @@
             },
             body: JSON.stringify({ id: obj.id }),
           });
-          const data = await res1.json();
+          const data1 = await res1.json();
           if (res1.status == 200) {
             div.remove();
-            del.remove();
           }
         });
       }
+
+      const UI = async () => {
+        const res2 = await fetch("/showData", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data2 = await res2.json();
+        if (res2.status == 200) {
+          data2.forEach((obj) => createui(obj));
+        }
+      };
+
+      UI();
     </script>
   </body>
 </html>

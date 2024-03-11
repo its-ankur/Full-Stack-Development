@@ -9,7 +9,6 @@ app.get("/", (req, res) => {
 });
 app.post("/addData", (req, res) => {
   console.log(req.body);
-
   // let data;
   try {
     data = fs.readFileSync("todo.txt", "utf8");
@@ -29,7 +28,7 @@ app.get("/showData", (req, res) => {
   } catch (err) {
     data = [];
   }
-  res.status(200).json(req.body);
+  res.status(200).json(data);
 });
 app.delete("/deleteData", (req, res) => {
   let data;

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    /* let request = new XMLHttpRequest();
+    request.addEventListener("load",()=>{
+        let data=JSON.parse(request.responseText);
+        alert(data.name);
+    });
+    request.onreadystatechange=()=>{
+        if(request.readyState==4){
+            alert(request.responseText);
+        }
+    }
+    request.open("POST","http://localhost:3000/getNews",true);
+    request.setRequestHeader("Content-Type","application/json");
+    let obj={
+        name:"My Name"
+    }
+    request.send(JSON.stringify(obj)); */
+    fetch("http://localhost:3000/getNews",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            name:"My Name"
+        })
+    }).then((response)=>{
+        return response.json();
+    }).then((data)=>{
+        alert(data.name);
+    });
+</script>
+</html>
