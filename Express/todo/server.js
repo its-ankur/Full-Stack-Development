@@ -8,7 +8,6 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 app.post("/addData", (req, res) => {
-  console.log(req.body);
   // let data;
   try {
     data = fs.readFileSync("todo.txt", "utf8");
@@ -30,7 +29,7 @@ app.get("/showData", (req, res) => {
   }
   res.status(200).json(data);
 });
-app.delete("/deleteData", (req, res) => {
+app.post("/deleteData", (req, res) => {
   let data;
   try {
     data = fs.readFileSync("todo.txt", "utf8");
@@ -38,7 +37,20 @@ app.delete("/deleteData", (req, res) => {
   } catch (err) {
     data = [];
   }
-  data.splice(req.query.index, 1);
+  let data1=data.filter((item)=>item.id!=req.body.id);
+  fs.writeFileSync("todo.txt", JSON.stringify(data1));
+  res.status(200).json(req.body);
+});
+app.post("/editData", (req, res) => {
+  let data;
+  try {
+    data = fs.readFileSync("todo.txt", "utf8");
+    data = JSON.parse(data);
+  } catch (err) {
+    data = [];
+  }
+  let index=data.findIndex((item)=>item.id==req.body.id);
+  data[index]=req.body;
   fs.writeFileSync("todo.txt", JSON.stringify(data));
   res.status(200).json(req.body);
 });
