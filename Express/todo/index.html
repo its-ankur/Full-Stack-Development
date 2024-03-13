@@ -1,138 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <div>
-        <input type="text" id="taskinp" />
-        <button id="add">add</button>
+      <input type="text" id="taskinp" />
+      <button id="add">add</button>
     </div>
-    <div id="taskcontainer"></div>
+    <div id="taskcontainer">
+      <button id="save" style="display: none">Save</button>
+      <button id="cancel" style="display: none">Cancel</button>
+      <button id="delete" style="display: none">Delete</button>
+    </div>
     <script>
-        var taskcontainer = document.getElementById("taskcontainer");
-        var taskinp = document.getElementById("taskinp");
-        var add = document.getElementById("add");
+      var taskcontainer = document.getElementById("taskcontainer");
+      var taskinp = document.getElementById("taskinp");
+      var add = document.getElementById("add");
+      var save = document.getElementById("save");
+      var cancel = document.getElementById("cancel");
+      var deleteData = document.getElementById("delete");
+      add.addEventListener("click", async () => {
+        const obj = {
+          task: taskinp.value,
+          id: Date.now(),
+        };
+        const res = await fetch("/addData", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(obj),
+        });
+        const data = await res.json();
+        if (res.status == 200) {
+          createui(data);
+        }
+        taskinp.value = "";
+      });
 
-        add.addEventListener("click", async () => {
-            const obj = {
-                task: taskinp.value,
-                id: Date.now(),
-            };
-            const res = await fetch("/addData", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(obj),
-            });
-            const data = await res.json();
-            if (res.status == 200) {
-                createui(data);
-            }
-            taskinp.value = "";
+      function createui(obj) {
+        console.log(obj);
+        const div = document.createElement("div");
+        const taskText = document.createElement("p");
+        taskText.innerText = obj.task;
+        taskText.setAttribute("id", obj.id);
+        div.appendChild(taskText);
+
+        const editButton = document.createElement("button");
+        editButton.innerText = "Edit";
+        div.appendChild(editButton);
+
+        const del = document.createElement("button");
+        del.innerText = "Delete";
+        div.appendChild(del);
+
+        taskcontainer.appendChild(div);
+
+        editButton.addEventListener("click", () => {
+          taskText.style.display = "none";
+          taskinp.value = obj.task;
+          editButton.style.display = "none";
+          save.style.display = "inline-block";
+          cancel.style.display = "inline-block";
+          deleteData.style.display = "inline-block";
+          save.setAttribute("data-id", obj.id);
+          cancel.setAttribute("data-id", obj.id);
+          deleteData.setAttribute("data-id", obj.id);
+          del.style.display = "none";
+          add.style.display = "none";
         });
 
-        function createui(obj) {
-            console.log(obj);
-            const div = document.createElement("div");
-            const taskText = document.createElement("p");
-            taskText.innerText = obj.task;
-            div.appendChild(taskText);
+        save.addEventListener("click", async () => {
+          const newTask = taskinp.value;
+          const res3 = await fetch("/editData", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              task: newTask,
+              id: save.getAttribute("data-id"),
+            }),
+          });
 
-            const taskInput = document.createElement("input");
-            taskInput.type = "text";
-            taskInput.value = obj.task;
-            taskInput.style.display = "none";
-            div.appendChild(taskInput);
+          const data3 = await res3.json();
+          if (res3.status == 200) {
+            let task = document.getElementById(save.getAttribute("data-id"));
+            task.innerText = newTask;
+            task.style.display = "block";
+            editButton.style.display = "inline-block";
+            save.style.display = "none";
+            cancel.style.display = "none";
+            taskinp.value = "";
+            deleteData.style.display = "none";
+            del.style.display = "inline-block";
+            add.style.display = "inline-block";
+          }
+        });
 
-            const editButton = document.createElement("button");
-            editButton.innerText = "Edit";
-            div.appendChild(editButton);
+        cancel.addEventListener("click", () => {
+          taskText.style.display = "block";
+          taskinp.value = "";
+          editButton.style.display = "inline-block";
+          save.style.display = "none";
+          cancel.style.display = "none";
+          deleteData.style.display = "none";
+          del.style.display = "inline-block";
+          add.style.display = "inline-block";
+        });
 
-            const saveButton = document.createElement("button");
-            saveButton.innerText = "Save";
-            saveButton.style.display = "none";
-            div.appendChild(saveButton);
+        del.addEventListener("click", async () => {
+          const res1 = await fetch("/deleteData", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: obj.id }),
+          });
+          const data1 = await res1.json();
+          if (res1.status == 200) {
+            div.remove();
+          }
+        });
+        deleteData.addEventListener("click", async () => {
+          const res1 = await fetch("/deleteData", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: deleteData.getAttribute("data-id") }),
+          });
+          const data3 = await res1.json();
+          if (res1.status == 200) {
+            taskinp.value = "";
+            save.style.display = "none";
+            cancel.style.display = "none";
+            deleteData.style.display = "none";
+            add.style.display = "inline-block";
+          }
+          else{
+            console.log("error");
+          }
+        });
+      }
 
-            const cancelButton = document.createElement("button");
-            cancelButton.innerText = "Cancel";
-            cancelButton.style.display = "none";
-            div.appendChild(cancelButton);
-
-            const del = document.createElement("button");
-            del.innerText = "Delete";
-            div.appendChild(del);
-
-            taskcontainer.appendChild(div);
-
-            editButton.addEventListener("click", () => {
-                taskText.style.display = "none";
-                taskInput.style.display = "inline-block";
-                editButton.style.display = "none";
-                saveButton.style.display = "inline-block";
-                cancelButton.style.display = "inline-block";
-            });
-
-            saveButton.addEventListener("click", async () => {
-                const newTask = taskInput.value;
-                const res3 = await fetch("/editData", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ task: newTask, id: obj.id }),
-                });
-                const data3 = await res3.json();
-                if (res3.status == 200) {
-                    taskText.innerText = newTask;
-                    taskText.style.display = "block";
-                    taskInput.style.display = "none";
-                    editButton.style.display = "inline-block";
-                    saveButton.style.display = "none";
-                    cancelButton.style.display = "none";
-                }
-            });
-
-            cancelButton.addEventListener("click", () => {
-                taskText.style.display = "block";
-                taskInput.style.display = "none";
-                editButton.style.display = "inline-block";
-                saveButton.style.display = "none";
-                cancelButton.style.display = "none";
-            });
-
-            del.addEventListener("click", async () => {
-                const res1 = await fetch("/deleteData", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ id: obj.id }),
-                });
-                const data1 = await res1.json();
-                if (res1.status == 200) {
-                    div.remove();
-                }
-            });
+      const UI = async () => {
+        const res2 = await fetch("/showData", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data2 = await res2.json();
+        if (res2.status == 200) {
+          data2.forEach((obj) => createui(obj));
         }
+      };
 
-        const UI = async () => {
-            const res2 = await fetch("/showData", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            const data2 = await res2.json();
-            if (res2.status == 200) {
-                data2.forEach((obj) => createui(obj));
-            }
-        };
-
-        UI();
+      UI();
     </script>
-</body>
+  </body>
 </html>
