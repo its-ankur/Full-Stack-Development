@@ -5,6 +5,8 @@ const userSchema=mongoose.Schema({
         type:String,
         default:"Pass"
     },
+},{
+    versionKey:false
 });
 const UserModel=mongoose.model('User',userSchema);
 module.exports=UserModel;
