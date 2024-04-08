@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    Welcome to chat page
+    <p id="msg"></p>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.js"></script>
+    <script>
+      let socket = io();
+      socket.on("message", (data) => {
+        console.log(data);
+        let p = document.getElementById("msg");
+        p.innerHTML = data;
+      });
+    </script>
+  </body>
+</html>
