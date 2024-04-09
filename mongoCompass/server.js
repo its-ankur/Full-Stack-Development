@@ -3,11 +3,14 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1:27017/test").then(() => {
-  console.log("Connected to database!");
-}).catch((error) => {
-  console.error("Error connecting to database:", error);
-});
+mongoose
+  .connect("mongodb://127.0.0.1:27017/test")
+  .then(() => {
+    console.log("Connected to database!");
+  })
+  .catch((error) => {
+    console.error("Error connecting to database:", error);
+  });
 let schema = new mongoose.Schema(
   {
     name: String,
@@ -32,6 +35,16 @@ app.post("/insert", async (req, res) => {
   } catch (error) {
     console.error("Error saving data:", error);
     res.status(500).json({ error: "Error saving data" });
+  }
+});
+app.get("/allData", async (req, res) => {
+  try {
+    let allData = await Model.find();
+    console.log("Data retrieved successfully");
+    res.json(allData);
+  } catch (error) {
+    console.error("Error retrieving data:", error);
+    res.status(500).json({ error: "Error retrieving data" });
   }
 });
 app.listen(3000, () => {
