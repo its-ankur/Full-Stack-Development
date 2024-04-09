@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+app.set("view engine", "ejs");
 mongoose
   .connect("mongodb://127.0.0.1:27017/test")
   .then(() => {
@@ -22,8 +23,9 @@ let schema = new mongoose.Schema(
 let Model = mongoose.model("Model", schema);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+app.get("/",async (req, res) => {
+  let allData=await Model.find();
+  res.render("index", { data: allData });
 });
 app.post("/insert", async (req, res) => {
   console.log(req.body);
@@ -35,16 +37,6 @@ app.post("/insert", async (req, res) => {
   } catch (error) {
     console.error("Error saving data:", error);
     res.status(500).json({ error: "Error saving data" });
-  }
-});
-app.get("/allData", async (req, res) => {
-  try {
-    let allData = await Model.find();
-    console.log("Data retrieved successfully");
-    res.json(allData);
-  } catch (error) {
-    console.error("Error retrieving data:", error);
-    res.status(500).json({ error: "Error retrieving data" });
   }
 });
 app.listen(3000, () => {

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="text" id="name" placeholder="Name" />
+    <button id="btn">Submit</button>
+    <div>
+      <div id="allData">
+        <% if (data && data.length > 0) { %> <% data.forEach((element) => { %>
+        <p><%= element.name %></p>
+        <% }); %> <% } else { %>
+        <p>No data available</p>
+        <% } %>
+      </div>
+    </div>
+  </body>
+  <script>
+    let btn = document.getElementById("btn");
+    let name = document.getElementById("name");
+    btn.addEventListener("click", () => {
+      fetch("http://localhost:3000/insert", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name.value,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      let p = document.createElement("p");
+      p.innerHTML = name.value;
+      allData.appendChild(p);
+      name.value = "";
+    });
+  </script>
+</html>
