@@ -11,9 +11,11 @@
     <button id="btn">Submit</button>
     <div>
       <div id="allData">
-        <% if (data && data.length > 0) { %> <% data.forEach((element) => { %>
+        <% if (data && data.length > 0) { %>
+          <% data.forEach((element) => { %>
         <p><%= element.name %></p>
-        <% }); %> <% } else { %>
+        <% }); %> 
+        <% } else { %>
         <p>No data available</p>
         <% } %>
       </div>
