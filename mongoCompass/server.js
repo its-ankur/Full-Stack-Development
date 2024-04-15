@@ -5,7 +5,9 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 app.set("view engine", "ejs");
 mongoose
-  .connect("mongodb://127.0.0.1:27017/test")
+  .connect(
+    "mongodb://127.0.0.1:27017/test",
+  )
   .then(() => {
     console.log("Connected to database!");
   })
@@ -20,11 +22,11 @@ let schema = new mongoose.Schema(
     versionKey: false,
   }
 );
-let Model = mongoose.model("Model", schema);
+let Model = mongoose.model("mode", schema);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.get("/",async (req, res) => {
-  let allData=await Model.find();
+app.get("/", async (req, res) => {
+  let allData = await Model.find();
   res.render("index", { data: allData });
 });
 app.post("/insert", async (req, res) => {

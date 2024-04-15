@@ -7,15 +7,34 @@
     <script src="https://cdn.socket.io/4.0.1/socket.io.js"></script>
   </head>
   <body>
-    Welcome to chat page
-    <p id="msg"></p>
+    <input type="text" id="msg" />
+    <button id="sent">Send</button>
+    <div id="messages"></div>
     <script>
+      let btn = document.getElementById("sent");
+      let messagesDiv = document.getElementById("messages");
       let socket = io();
+      socket.on("connect", (data) => {
+        try {
+          console.log(data);
+        } catch (error) {
+          console.log(error);
+        }
+      });
+      btn.addEventListener("click", () => {
+        let msg = document.getElementById("msg").value;
+        socket.emit("message", msg);
+      });
+
       socket.on("message", (data) => {
         console.log(data);
-        let p = document.getElementById("msg");
-        p.innerHTML = data;
       });
+      /* socket.on("single", () => {
+        msg.value = "";
+        let p = document.createElement("p");
+        p.textContent = "Single";
+        messagesDiv.append(p);
+      }); */
     </script>
   </body>
 </html>
