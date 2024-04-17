@@ -59,19 +59,114 @@
 // data="hello";
 // data=true;
 //let data:number & string; //intersection type
-function test(message) {
-    console.log(message);
+// function test(message:string){
+//     console.log(message);
+// }
+// function sum(x:number,y:number){
+//     return x+y;
+// }
+// function getData(id:number|null){  //narrowing
+//     let results:string[]=["zero","one","two","three"];
+//     // if(id==null){
+//     //     return "No data found";
+//     // }
+//     // return results[id];
+//     return id==null?"No data found":results[id];
+// }
+// let a=getData(null);
+// console.log(a);
+// function with default argument
+// function sum(x:number,y:number=0){
+//     if(y==undefined){
+//         return x;
+//     }
+//     return x+y;
+// }
+// console.log(sum(10));
+//Intersection
+// type Personal={
+//     name:string;
+//     getName:()=>void;
+// }
+// type Professional={
+//     code:number;
+//     getCode:()=>number;
+// }
+// let emp:Personal & Professional={
+//     name:"Test",
+//     getName(){
+//         return this.name;
+//     },
+//     code:10,
+//     getCode(){
+//         return this.code;
+//     }
+// }
+//Handling null
+// type Customer = {
+//   name: string;
+// };
+// function getCustomer(id: number): Customer | null {
+//   if (id == 0) {
+//     return null;
+//   }
+//   return { name: "YourName" };
+// }
+// let customer = getCustomer(1);
+// // if (customer != null) {
+// //   console.log(customer.name);
+// // }
+// console.log(customer?.name);
+// interface Point {
+//   x: number;
+//   y: number;
+// }
+// function drawPoint(point: Point) {
+//   console.log(point.x, point.y);
+// }
+// function getDistance(point1: Point, point2: Point) {
+//   console.log(point1.x, point1.y);
+// }
+// class CPoint implements Point {
+//   x: number;
+//   y: number;
+//   constructor(x: number, y: number) {
+//     this.x = x;
+//     this.y = y;
+//   }
+// }
+// let myPoint: Point = {
+//   x: 20,
+//   y: 30,
+// };
+// let myPoint1: Point = {
+//   x: 10,
+//   y: 20,
+// };
+// let myPoint2: Point = {
+//   x: 30,
+//   y: 40,
+// };
+// drawPoint(myPoint);
+class Point {
+    constructor(x, y) {
+        this.x = 10;
+        this.y = 20;
+        if (x != undefined) {
+            this.x = x;
+        }
+        if (y != undefined) {
+            this.y = y;
+        }
+    }
+    drawPoint() {
+        console.log(this.x, this.y);
+    }
+    getDistance(point) {
+        console.log(this.x, point.x);
+    }
 }
-function sum(x, y) {
-    return x + y;
-}
-function getData(id) {
-    let results = ["zero", "one", "two", "three"];
-    // if(id==null){
-    //     return "No data found";
-    // }
-    // return results[id];
-    return id == null ? "No data found" : results[id];
-}
-let a = getData(null);
-console.log(a);
+let myPoint = new Point(10, 20);
+myPoint.drawPoint();
+let myPoint1 = new Point(30, 40);
+myPoint.getDistance(myPoint1);
