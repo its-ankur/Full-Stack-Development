@@ -8,7 +8,8 @@ import CounterClass from "./CounterClass";
 import CTimer from "./CTimer";
 import ListGroup from "./ListGroup";
 import UI from "./UI";
-
+import PlusMinus from "./PlusMinus";
+import NewPractice from "./NewPractice";
 // const ClickHandler1 = () => {
 //   console.log("Click handler 1");
 // };
@@ -32,7 +33,9 @@ import UI from "./UI";
 const App = () => {
   return (
     // <ListGroup/>
-    <UI/>
+    //<UI/>
+    //<PlusMinus/>
+    <NewPractice/>
   )
 }
 
