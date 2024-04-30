@@ -1,14 +1,4 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import Greet from "./Greet";
-import GreetClass from "./GreetClass";
-import Counter from "./Counter";
-import CounterClass from "./CounterClass";
-import CTimer from "./CTimer";
-import ListGroup from "./ListGroup";
-import UI from "./UI";
-import PlusMinus from "./PlusMinus";
 import NewPractice from "./NewPractice";
 // const ClickHandler1 = () => {
 //   console.log("Click handler 1");
