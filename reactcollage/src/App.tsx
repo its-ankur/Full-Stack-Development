@@ -1,5 +1,6 @@
 import "./App.css";
 import NewPractice from "./NewPractice";
+import TextChange from "./TextChange";
 // const ClickHandler1 = () => {
 //   console.log("Click handler 1");
 // };
@@ -25,7 +26,7 @@ const App = () => {
     // <ListGroup/>
     //<UI/>
     //<PlusMinus/>
-    <NewPractice/>
+    <TextChange/>
   )
 }
 
