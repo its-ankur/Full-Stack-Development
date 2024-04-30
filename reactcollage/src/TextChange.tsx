@@ -1,22 +1,38 @@
 import React, { ChangeEvent, Component } from "react";
+
 type State = {
   ch: string;
   t: string[];
 };
+
 export default class TextChange extends Component<any, State> {
   state = {
     ch: "",
     t: [],
   };
+
+  componentDidMount() {
+    const savedTexts = localStorage.getItem("texts");
+    if (savedTexts) {
+      this.setState({ t: JSON.parse(savedTexts) });
+    }
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem("texts", JSON.stringify(this.state.t));
+  }
+
   chan = (e: ChangeEvent<HTMLInputElement>) => {
     this.setState({ ch: e.target.value });
   };
+
   newEle = () => {
     this.setState((prevState) => ({
       t: [...prevState.t, prevState.ch],
       ch: "",
     }));
   };
+
   render() {
     return (
       <>
